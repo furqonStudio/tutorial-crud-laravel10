@@ -12,9 +12,9 @@ class PersonController extends Controller
      */
     public function index()
     {
-        $persons = Person::all();
+        $people = Person::all();
         return view('pages.index', [
-            'persons' => $persons
+            'people' => $people
         ]);
     }
 
@@ -23,7 +23,7 @@ class PersonController extends Controller
      */
     public function create()
     {
-        //
+        return view('pages.create');
     }
 
     /**
@@ -31,7 +31,10 @@ class PersonController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->all();
+        Person::create($data);
+
+        return redirect()->route('people.index');
     }
 
     /**
@@ -45,24 +48,32 @@ class PersonController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Person $person)
+    public function edit($id)
     {
-        //
+        $item = Person::findOrFail($id);
+        return view('pages.edit', [
+            'item' => $item
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Person $person)
+    public function update(Request $request, $id)
     {
-        //
+        $data = $request->all();
+        Person::findOrFail($id)->update($data);
+
+        return redirect()->route('people.index');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Person $person)
+    public function destroy($id)
     {
-        //
+        Person::findOrFail($id)->delete();
+
+        return redirect()->route('people.index');
     }
 }
